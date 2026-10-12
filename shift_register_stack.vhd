@@ -33,6 +33,9 @@ begin
       stack <= (others => (others => '0'));
       count <= (others => '0');
     elsif rising_edge(clk) then 
+      if(pshpop = "11") then
+        stack(0) <= data_i;
+      end if;
       if(count >= STACK_SIZE-1) then
         ful <= '1';
       else 
