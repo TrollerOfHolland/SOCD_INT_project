@@ -5,19 +5,19 @@ use ieee.std_logic_textio.all;
 use std.textio.all;
 
 entity tvc_siso_gen is
-  generic (word_length: natural;
+  generic (DATA_WIDTH: natural;
            half_clock_period: time := 100 ns;
            -- only used for file_io architecture
            in_file_name: string := "rpn.in";
            out_file_name: string := "rpn.out");
   -- note that the signals are the same as in the entity siso_gen 
   -- where inputs have become outputs and vice versa 
-  port (data_in: out std_logic_vector(word_length-1 downto 0);
+  port (data_in: out std_logic_vector(DATA_WIDTH-1 downto 0);
         clk: out std_logic;
         reset: out std_logic;
 
         req: in std_logic;
-        data_out: in std_logic_vector(word_length-1 downto 0);
+        data_out: in std_logic_vector(DATA_WIDTH-1 downto 0);
         ready: in std_logic);
 end tvc_siso_gen;
 

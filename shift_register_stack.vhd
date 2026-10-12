@@ -11,15 +11,15 @@ entity shift_register_stack is
 port( clk   :   in std_logic;
       rst   :   in std_logic;
       pshpop:   in std_logic_vector(1 downto 0);  
-      data_i:   in std_logic_vector((DATA_WIDTH-1) downto 0);
-      data_a:   out std_logic_vector((DATA_WIDTH-1)  downto 0);
-      data_b:   out std_logic_vector((DATA_WIDTH-1)  downto 0);
+      data_i:   in unsigned((DATA_WIDTH-1) downto 0);
+      data_a:   out unsigned((DATA_WIDTH-1)  downto 0);
+      data_b:   out unsigned((DATA_WIDTH-1)  downto 0);
       ful   :   out std_logic
 ); end shift_register_stack;
 
 architecture arch of shift_register_stack is 
     type stack_array is array (0 to STACK_SIZE) of
-        std_logic_vector((DATA_WIDTH-1) downto 0);
+        unsigned((DATA_WIDTH-1) downto 0);
 
     -- todo: size this based on stack size.
     signal stack : stack_array := (others => (others => '0'));
