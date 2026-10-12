@@ -51,16 +51,13 @@ begin
           end if;
         when "10" =>
           ful_i <= '0';
-          if(count = 1) then
-            count <= (others => '0');
-          elsif(count /= 0) then
-            count <= count - 2;
+          if(count /= 0) then
+            count <= count - 1;
           end if;
           stack(0) <= data_i;
           stack(STACK_SIZE-1) <= (others => '0');
-          stack(STACK_SIZE-2) <= (others => '0');
-          for i in 1 to STACK_SIZE-2 loop
-            stack(i) <= stack(i+2);
+          for i in 1 to STACK_SIZE-1 loop
+            stack(i) <= stack(i+1);
           end loop;
         when "11" =>
           stack(0) <= data_i;

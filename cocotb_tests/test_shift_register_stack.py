@@ -27,12 +27,11 @@ class ShiftRegisterStack:
             self.data[0] = data_in
         elif(code == stack_code.pop):
             self.full = 0
-            self.count -= 2
+            self.count -= 1
             self.data[0] = data_in
-            for i in range(1, self.stack_size-2):
-                self.data[i] = self.data[i+2]
+            for i in range(1, self.stack_size-1):
+                self.data[i] = self.data[i+1]
             self.data[self.stack_size-1] = 0
-            self.data[self.stack_size-2] = 0
         else:
             if(code == stack_code.push):
                 if(not self.full):
