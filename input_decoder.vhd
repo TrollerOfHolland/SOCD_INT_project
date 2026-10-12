@@ -3,10 +3,10 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity input_decoder is
-  generic(WORD_LENGTH: integer := 8);
-  port (data_in: in std_logic_vector(WORD_LENGTH - 1 downto 0);
-        data_out: out std_logic_vector(3 downto 0);
-        operator: out std_logic;
+  generic(DATA_WIDTH: integer := 8);
+  port (data_in: in std_logic_vector(DATA_WIDTH - 1 downto 0);
+        decoder_out: out std_logic_vector(3 downto 0);
+        is_operator: out std_logic;
         valid: out std_logic);
 end input_decoder;
 
@@ -17,18 +17,20 @@ begin
     begin
         case to_integer(unsigned(data_in)) is
             when 48 to 57 =>
-                data_out <= data_in(3 downto 0);
-                operator <= '0';
+                decoder_out <= data_in(3 downto 0);
+                is_operator <= '0';
                 valid <= '1';
             when 69 => -- E
-                data_out <= "0010";
-                operator <= '1';
+                decoder_out <= "0010";
+                is_operator <= '1';
                 valid <= '1';
             when 42 to 43 => -- */+
-                data_out <= "000" & data_in(0);
+                decoder_out <= "000" & data_in(0);
+                is_operator <= '1';
+                valid <= '1';
             when others =>
-                data_out <= (others => '0');
-                operator <= '0';
+                decoder_out <= (others => '0');
+                is_operator <= '0';
                 valid <= '0';
         end case;
     end process;
