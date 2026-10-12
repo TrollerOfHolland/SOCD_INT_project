@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use IEEE.MATH_REAL.ALL;
 
 entity shift_register_stack is 
   generic (
@@ -22,7 +23,7 @@ architecture arch of shift_register_stack is
 
     -- todo: size this based on stack size.
     signal stack : stack_array := (others => (others => '0'));
-    signal count : unsigned(31 downto 0) := (others => '0'); 
+    signal count : unsigned(integer(ceil(log2(real(STACK_SIZE))))-1 downto 0) := (others => '0'); 
 begin 
 
   data_a <= stack(0);

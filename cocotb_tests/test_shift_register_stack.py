@@ -6,7 +6,6 @@ from cocotb.triggers import RisingEdge,FallingEdge
 from enum import IntEnum
 import random
 
-STACK_SIZE = 100
 DATA_WIDTH = 8
 
 class pshpopcodes(IntEnum):
@@ -17,23 +16,23 @@ class pshpopcodes(IntEnum):
 class ShiftRegisterStack:
 
     def reset(self):
-        self.data = [0] * STACK_SIZE
+        self.data = [0] * self.stack_size
         self.count = 0
 
     def update(self, code: pshpopcodes, data_in: int):
-        if(self.count >= STACK_SIZE-1):
+        if(self.count >= self.stack_size-1):
             full = 1
         else:
             full = 0
             if(code == pshpopcodes.push):
                 self.count += 1
-                for i in range(STACK_SIZE-1, 0, -1):
+                for i in range(self.stack_size-1, 0, -1):
                     self.data[i] = self.data[i-1]
                 self.data[0] = data_in
             elif(code == pshpopcodes.pop):
                 self.count -= 2
                 self.data[0] = data_in
-                for i in range(1, STACK_SIZE-2):
+                for i in range(1, self.stack_size-2):
                     self.data[i] = self.data[i+2]
 
         if(self.count < 0):
@@ -41,7 +40,8 @@ class ShiftRegisterStack:
 
         return(self.data[0], self.data[1], full)
         
-    def __init__(self):
+    def __init__(self, stack_size: int):
+        self.stack_size = stack_size
         self.reset()
 
 def generate_command() -> tuple[pshpopcodes, int]:
@@ -58,8 +58,8 @@ def generate_command() -> tuple[pshpopcodes, int]:
 
 @cocotb.test()
 async def test_shift_register_stack(dut):
-
-    reference_device = ShiftRegisterStack()
+    stack_size = int(dut.STACK_SIZE.value)
+    reference_device = ShiftRegisterStack(stack_size)
 
     # Start a 10 ns clock
     cocotb.start_soon(
@@ -69,8 +69,6 @@ async def test_shift_register_stack(dut):
     await RisingEdge(dut.clk)
     await FallingEdge(dut.clk)
     dut.rst.value = 0
-
-    print(dut.data_a.value)
 
     full_previous = 0
 
