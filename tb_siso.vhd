@@ -1,14 +1,15 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity tb_siso8 is
-    generic(DATA_WIDTH: integer := 8;
+entity tb_siso_gen is
+    generic (word_length: natural;
+            DATA_WIDTH: natural := word_length;
             STACK_SIZE: integer := 100;
             half_clock_period: time := 5 ns);
-end entity tb_siso8;
+end entity tb_siso_gen;
 
-architecture structure of tb_siso8 is
-    component siso8 is
+architecture structure of tb_siso_gen is
+    component siso_gen is
         generic (DATA_WIDTH: integer;
                  STACK_SIZE: integer);
           port (data_in: in std_logic_vector(DATA_WIDTH - 1 downto 0);
@@ -18,7 +19,7 @@ architecture structure of tb_siso8 is
             req: out std_logic;
             data_out: out std_logic_vector(DATA_WIDTH - 1 downto 0);
             ready: out std_logic);
-    end component siso8;
+    end component siso_gen;
 
     component tvc_siso_gen is
       generic (DATA_WIDTH: natural;
@@ -38,9 +39,9 @@ architecture structure of tb_siso8 is
     end component tvc_siso_gen;
             
     signal data_in, data_out: std_logic_vector(DATA_WIDTH - 1 downto 0); 
-    signal clk, reset, req, ready, operator, valid: std_logic;
+    signal clk, reset, req, ready: std_logic;
 begin
-    duv: siso8
+    duv: siso_gen
      generic map(DATA_WIDTH => DATA_WIDTH,
                  STACK_SIZE => STACK_SIZE)
      port map(
@@ -68,3 +69,14 @@ begin
     );
 
 end structure;
+
+entity tb_siso_gen_top is
+end tb_siso_gen_top;
+
+architecture top of tb_siso_gen_top is
+  component tb_siso_gen
+    generic(word_length: natural := 8);
+  end component;
+begin
+  tg: tb_siso_gen;
+end top;

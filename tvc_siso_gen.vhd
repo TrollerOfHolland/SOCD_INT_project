@@ -75,7 +75,7 @@ begin
           if good
           then
               -- encode input as a 2's complement signal
-              data_in <= std_logic_vector(to_unsigned(character'pos(input), 8));
+              data_in <= std_logic_vector(to_unsigned(character'pos(input), DATA_WIDTH));
               time_out_counter := 0;
           else
               reset <= '1';
