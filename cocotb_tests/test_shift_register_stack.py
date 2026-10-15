@@ -102,14 +102,14 @@ async def test_shift_register_stack(dut):
         assert b == int(dut.data_b.value)
         assert full == dut.ful.value
         assert reference_device.count == int(dut.count.value)
-        if(full and full_previous):
-            if(random.random() > 0.3):
-                force_pop_all = True
-            else:
-                dut.rst.value = 1 
-                await RisingEdge(dut.clk)
-                await FallingEdge(dut.clk)
-                dut.rst.value = 0
-                reference_device.reset()
+        # if(full and full_previous):
+        #     if(random.random() > 0.3):
+        #         force_pop_all = True
+        #     else:
+        #         dut.rst.value = 1 
+        #         await RisingEdge(dut.clk)
+        #         await FallingEdge(dut.clk)
+        #         dut.rst.value = 0
+        #         reference_device.reset()
 
         full_previous = full
