@@ -62,9 +62,13 @@ begin
             then
                 ready <= '0';
                 first_digit <= true;
-            else
+            elsif (valid = '1')
+            then
                 ready <= '1';
                 first_digit <= (is_operator = '1');
+            else
+                ready <= '0';
+                first_digit <= first_digit;
             end if;
         end if;
     end process seq;
