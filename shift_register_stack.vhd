@@ -23,26 +23,23 @@ architecture arch of shift_register_stack is
 
     -- todo: size this based on stack size.
     signal stack : stack_array := (others => (others => '0'));
-    signal count : unsigned(integer(ceil(log2(real(STACK_SIZE))))-1 downto 0) := (others => '0');
+    signal count : unsigned(integer(ceil(log2(real(STACK_SIZE+1))))-1 downto 0) := (others => '0');
     signal ful_i : std_logic := '0'; 
 begin 
 
   data_a <= stack(0);
   data_b <= stack(1);
+  ful_i <= '1' when count >= STACK_SIZE + 1 else '0';
   ful <= ful_i;
 
   seq: process(clk, rst, data_i) begin
     if(rst = '1') then 
       stack <= (others => (others => '0'));
       count <= (others => '0');
-      ful_i <= '0';
     elsif rising_edge(clk) then 
       case pshpop is 
       when "01" => 
-          if(count >= STACK_SIZE-2) then
-            ful_i <= '1';
-          end if;
-          if(ful_i = '0') then
+          if (ful_i = '0') then
             count <= count + 1;
             stack(0) <= data_i;
             for i in STACK_SIZE downto 1 loop
@@ -50,7 +47,6 @@ begin
             end loop;
           end if;
         when "10" =>
-          ful_i <= '0';
           if(count /= 0) then
             count <= count - 1;
           end if;
