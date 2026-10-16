@@ -1,67 +1,27 @@
-
-import cocotb
-from cocotb.triggers import Timer
-from cocotb.clock import Clock
-from cocotb.triggers import RisingEdge,FallingEdge
-from enum import IntEnum
 import random
 
+import cocotb
+from cocotb.clock import Clock
+from cocotb.triggers import FallingEdge, RisingEdge
+from rpn_calc import ShiftRegisterStack, stack_code
 
 DATA_WIDTH = 8
 
-class stack_code(IntEnum):
-    nothing = 0 
-    push = 1 
-    pop = 2 
-    replace_top = 3
-
-class ShiftRegisterStack:
-
-    def reset(self):
-        self.data = [0] * self.stack_size
-        self.count = 0
-        self.full = 0
-
-    def update(self, code: stack_code, data_in: int):
-        if(code == stack_code.replace_top):
-            self.data[0] = data_in
-        elif(code == stack_code.pop):
-            self.full = 0
-            self.count -= 1
-            self.data[0] = data_in
-            for i in range(1, self.stack_size-1):
-                self.data[i] = self.data[i+1]
-            self.data[self.stack_size-1] = 0
-        else:
-            if(code == stack_code.push):
-                if(not self.full):
-                    self.count += 1
-                    for i in range(self.stack_size-1, 0, -1):
-                        self.data[i] = self.data[i-1]
-                    self.data[0] = data_in
-                if(self.count-1 >= self.stack_size-2):
-                    self.full = 1
-
-        if(self.count < 0):
-            self.count = 0
-
-        return(self.data[0], self.data[1], self.full)
-        
-    def __init__(self, stack_size: int):
-        self.full = 0
-        self.stack_size = stack_size
-        self.reset()
 
 def generate_command() -> tuple[stack_code, int]:
-    weighted_options = [(stack_code.push, 0.5), (stack_code.nothing, 0.05), 
-                        (stack_code.pop, 0.1), (stack_code.replace_top, 0.35)]
+    weighted_options = [
+        (stack_code.push, 0.5),
+        (stack_code.nothing, 0.05),
+        (stack_code.pop, 0.1),
+        (stack_code.replace_top, 0.35),
+    ]
     choices, weights = list(map(list, zip(*weighted_options)))
-    code = random.choices(choices,
-                weights=weights)[0]
-    
+    code = random.choices(choices, weights=weights)[0]
+
     data_in = random.randrange(1 << 32)
 
     return (code, data_in)
+
 
 @cocotb.test()
 async def test_shift_register_stack(dut):
@@ -69,10 +29,8 @@ async def test_shift_register_stack(dut):
     reference_device = ShiftRegisterStack(stack_size)
 
     # Start a 10 ns clock
-    cocotb.start_soon(
-        Clock(dut.clk, 10, unit="ns").start()
-    )
-    dut.rst.value = 1 
+    cocotb.start_soon(Clock(dut.clk, 10, unit="ns").start())
+    dut.rst.value = 1
     await RisingEdge(dut.clk)
     await FallingEdge(dut.clk)
     dut.rst.value = 0
@@ -80,7 +38,7 @@ async def test_shift_register_stack(dut):
     force_pop_all = False
 
     for _ in range(10000):
-        if(reference_device.data[1] == 0):
+        if reference_device.data[1] == 0:
             force_pop_all = False
 
         if force_pop_all:
@@ -106,7 +64,7 @@ async def test_shift_register_stack(dut):
         #     if(random.random() > 0.3):
         #         force_pop_all = True
         #     else:
-        #         dut.rst.value = 1 
+        #         dut.rst.value = 1
         #         await RisingEdge(dut.clk)
         #         await FallingEdge(dut.clk)
         #         dut.rst.value = 0

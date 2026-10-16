@@ -18,7 +18,7 @@ port( clk   :   in std_logic;
 ); end shift_register_stack;
 
 architecture arch of shift_register_stack is 
-    type stack_array is array (0 to STACK_SIZE) of
+    type stack_array is array (0 to STACK_SIZE-1) of
         unsigned((DATA_WIDTH-1) downto 0);
 
     -- todo: size this based on stack size.
@@ -29,7 +29,7 @@ begin
 
   data_a <= stack(0);
   data_b <= stack(1);
-  ful_i <= '1' when count >= STACK_SIZE + 1 else '0';
+  ful_i <= '1' when count >= STACK_SIZE else '0';
   ful <= ful_i;
 
   seq: process(clk, rst, data_i) begin
@@ -42,20 +42,25 @@ begin
           if (ful_i = '0') then
             count <= count + 1;
             stack(0) <= data_i;
-            for i in STACK_SIZE downto 1 loop
+            for i in STACK_SIZE-1 downto 1 loop
               stack(i) <= stack(i-1);
             end loop;
           end if;
         when "10" =>
-          if(count /= 0) then
+          if(count > 1) then
             count <= count - 1;
+          elsif(count = 0) then
+            count <= (0 => '1', others => '0');
           end if;
           stack(0) <= data_i;
           stack(STACK_SIZE-1) <= (others => '0');
-          for i in 1 to STACK_SIZE-1 loop
+          for i in 1 to STACK_SIZE-2 loop
             stack(i) <= stack(i+1);
           end loop;
         when "11" =>
+          if(count = 0) then
+            count <= (0 => '1', others => '0');
+          end if;
           stack(0) <= data_i;
         when others =>
           null;
