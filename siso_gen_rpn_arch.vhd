@@ -73,7 +73,7 @@ begin
         end if;
     end process seq;
 
-    process(is_operator, valid, decoder_out, ALU_out, data_a, reset)
+    process(is_operator, valid, decoder_out, ALU_out, data_a, first_digit)
     begin
         if (valid = '1')
         then
