@@ -1,3 +1,5 @@
+# Author: Lars Gortemaker
+
 TOPLEVEL_LANG = vhdl
 SIM = ghdl
 

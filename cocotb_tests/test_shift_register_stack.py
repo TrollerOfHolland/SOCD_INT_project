@@ -1,3 +1,5 @@
+# Author: Lars Gortemaker
+
 import random
 
 import cocotb
