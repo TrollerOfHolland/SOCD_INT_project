@@ -20,7 +20,7 @@ def generate_command() -> tuple[stack_code, int]:
     choices, weights = list(map(list, zip(*weighted_options)))
     code = random.choices(choices, weights=weights)[0]
 
-    data_in = random.randrange(1 << 32)
+    data_in = random.randrange(1 << DATA_WIDTH)
 
     return (code, data_in)
 
@@ -44,7 +44,7 @@ async def test_shift_register_stack(dut):
             force_pop_all = False
 
         if force_pop_all:
-            (code, data_in) = (stack_code.pop, random.randrange(1 << 32))
+            (code, data_in) = (stack_code.pop, random.randrange(1 << DATA_WIDTH))
         else:
             (code, data_in) = generate_command()
         (a, b, full) = reference_device.update(code, data_in)
