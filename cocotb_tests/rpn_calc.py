@@ -26,8 +26,6 @@ class ShiftRegisterStack:
                 self.full = 0
                 if self.count > 1:
                     self.count -= 1
-                elif self.count == 0:
-                    self.count = 1
                 self.data[0] = data_in
                 for i in range(1, self.stack_size - 1):
                     self.data[i] = self.data[i + 1]

@@ -8,7 +8,7 @@ use IEEE.MATH_REAL.ALL;
 entity shift_register_stack is 
   generic (
     STACK_SIZE : integer := 100;
-    DATA_WIDTH : integer := 32
+    DATA_WIDTH : integer := 8
 );
 port( clk   :   in std_logic;
       rst   :   in std_logic;
@@ -51,14 +51,12 @@ begin
         when "10" =>
           if(count > 1) then
             count <= count - 1;
-          elsif(count = 0) then
-            count <= (0 => '1', others => '0');
           end if;
           stack(0) <= data_i;
-          stack(STACK_SIZE-1) <= (others => '0');
           for i in 1 to STACK_SIZE-2 loop
             stack(i) <= stack(i+1);
           end loop;
+          stack(STACK_SIZE-1) <= (others => '0');
         when "11" =>
           if(count = 0) then
             count <= (0 => '1', others => '0');

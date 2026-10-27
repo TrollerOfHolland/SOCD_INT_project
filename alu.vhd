@@ -5,7 +5,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity alu is
-    generic (DATA_WIDTH: integer := 8);
+    generic (DATA_WIDTH: integer);
     port (ALU_left: in unsigned(DATA_WIDTH - 1 downto 0);
           ALU_right: in unsigned(DATA_WIDTH - 1 downto 0);
           ALU_out: out unsigned(DATA_WIDTH - 1 downto 0);

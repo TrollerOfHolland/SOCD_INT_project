@@ -23,10 +23,11 @@ architecture structure of tb_siso_gen is
 
     component tvc_siso_gen is
       generic (DATA_WIDTH: natural;
+               STACK_SIZE: natural;
                half_clock_period: time := 100 ns;
                -- only used for file_io architecture
-               in_file_name: string := "rpn.in";
-               out_file_name: string := "rpn.out");
+               in_file_name: string;
+               out_file_name: string);
       -- note that the signals are the same as in the entity siso_gen 
       -- where inputs have become outputs and vice versa 
       port (data_in: out std_logic_vector(DATA_WIDTH-1 downto 0);
@@ -56,8 +57,10 @@ begin
     tvc: tvc_siso_gen
      generic map(
         DATA_WIDTH => DATA_WIDTH,
+        STACK_SIZE => STACK_SIZE,
         half_clock_period => half_clock_period,
-        in_file_name => "rpn.in"
+        in_file_name => "/dev/urandom",
+        out_file_name => "rpn.out"
     )
      port map(
         data_in => data_in,

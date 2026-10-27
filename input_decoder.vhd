@@ -5,7 +5,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity input_decoder is
-  generic(DATA_WIDTH: integer := 8);
+  generic(DATA_WIDTH: integer);
   port (data_in: in std_logic_vector(DATA_WIDTH - 1 downto 0);
         decoder_out: out std_logic_vector(3 downto 0);
         is_operator: out std_logic;
