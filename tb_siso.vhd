@@ -2,8 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity tb_siso_gen is
-    generic (word_length: natural;
-            DATA_WIDTH: natural := word_length;
+    generic (DATA_WIDTH: natural := 8;
             STACK_SIZE: integer := 100;
             half_clock_period: time := 5 ns);
 end entity tb_siso_gen;
@@ -78,7 +77,7 @@ end tb_siso_gen_top;
 
 architecture top of tb_siso_gen_top is
   component tb_siso_gen
-    generic(word_length: natural := 8);
+    generic(DATA_WIDTH: natural := 8);
   end component;
 begin
   tg: tb_siso_gen;

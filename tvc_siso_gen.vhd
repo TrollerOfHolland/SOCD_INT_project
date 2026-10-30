@@ -28,18 +28,29 @@ architecture tvc_siso_gen_arch of tvc_siso_gen is
   file in_file: text open Read_mode is in_file_name;
   -- output file
   file out_file: text open Write_mode is out_file_name;
+
+  function minimum(a, b: integer) return integer is
+  begin
+    if a < b then return a;
+    else return b; end if;
+  end function minimum;
+
+
+  -- internal clock
+  signal clk_i: std_logic;
 begin
+  clk <= clk_i;
 
   -- generate clock
   clock: process
   begin
-    clk <= '1';
+    clk_i <= '1';
     wait for half_clock_period;
-    clk <= '0';
+    clk_i <= '0';
     wait for half_clock_period;
   end process clock;
 
-  stimuli: process (clk)
+  stimuli: process (clk_i)
     variable first: boolean := true;
 
     variable inline, outline: line;
@@ -56,7 +67,7 @@ begin
     variable first_digit: boolean := true;
 
   begin
-    if falling_edge(clk)
+    if falling_edge(clk_i)
     then
       -- handle reset; reset signal is high during first clock cycle only
       if first 
