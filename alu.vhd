@@ -10,7 +10,7 @@ entity alu is
           ALU_right: in unsigned(DATA_WIDTH - 1 downto 0);
           ALU_out: out unsigned(DATA_WIDTH - 1 downto 0);
           enabled: in std_logic;
-          operator: in std_logic);
+          operator: in std_logic_vector(1 downto 0));
 end alu;
 
 architecture alu_arch of alu is
@@ -22,12 +22,15 @@ begin
         if (enabled = '0')
         then
             ALU_out <= (others => '0');
-        elsif (operator = '0') -- multiplication
+        elsif (operator = "00") -- multiplication
         then
             mult_temp := ALU_left * ALU_right;
             ALU_out <= mult_temp(DATA_WIDTH - 1 downto 0);
-        else -- Addition
+        elsif (operator = "01") -- Addition
+        then
             ALU_out <= ALU_left + ALU_right;
+        else
+            ALU_out <= ALU_left - ALU_right; -- subtraction
         end if;
     end process;
 

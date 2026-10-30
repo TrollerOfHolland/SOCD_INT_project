@@ -7,8 +7,8 @@ use ieee.numeric_std.all;
 architecture rpn of siso_gen is
     signal decoder_out: std_logic_vector(3 downto 0);
     signal ALU_left, ALU_right, ALU_out, data_a, data_b, data_i: unsigned(DATA_WIDTH - 1 downto 0);
-    signal is_operator, operator, valid, enabled, ful: std_logic;
-    signal pshpop: std_logic_vector(1 downto 0);
+    signal is_operator, valid, enabled, ful: std_logic;
+    signal pshpop, operator: std_logic_vector(1 downto 0);
     signal first_digit: boolean := true;
 begin
 
@@ -51,9 +51,9 @@ begin
     );
 
     enabled <= valid and is_operator;
-    operator <= decoder_out(0);
-    ALU_left <= data_a;
-    ALU_right <= data_b;
+    operator <= decoder_out(1 downto 0);
+    ALU_right <= data_a;
+    ALU_left <= data_b;
 
     seq: process(clk, reset)
 
@@ -81,7 +81,7 @@ begin
         then
             if (is_operator = '1')
             then
-                if (decoder_out(1) = '1')
+                if (decoder_out(1 downto 0) = "11")
                 then
                     pshpop <= "00";
                     data_i <= (others => '0');

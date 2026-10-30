@@ -23,11 +23,15 @@ begin
                 is_operator <= '0';
                 valid <= '1';
             when 69 => -- E
-                decoder_out <= "0010";
+                decoder_out <= "1111";
                 is_operator <= '1';
                 valid <= '1';
             when 42 to 43 => -- */+
                 decoder_out <= "000" & data_in(0);
+                is_operator <= '1';
+                valid <= '1';
+            when 45 => -- '-'
+                decoder_out <= "0010";
                 is_operator <= '1';
                 valid <= '1';
             when others =>

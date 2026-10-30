@@ -107,8 +107,10 @@ begin
                       else
                           stack(0) := (stack(0) * 10 + character'pos(input) - 48) mod (2 ** DATA_WIDTH);
                       end if;
-                  when '+' | '*' => if input = '+' then
+                  when '+' | '*' | '-' => if input = '+' then
                         stack(0) := (stack(0) + stack(1)) mod (2 ** DATA_WIDTH);
+                      elsif input = '-' then
+                          stack(0) := (stack(1) - stack(0)) mod (2 ** DATA_WIDTH);
                       else
                           stack(0) := (stack(0) * stack(1)) mod (2 ** DATA_WIDTH);
                       end if;
