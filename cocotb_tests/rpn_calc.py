@@ -67,6 +67,10 @@ class RPN_Calculator:
             result = self.stack.data[0] + self.stack.data[1] & MASK
             self.stack.update(stack_code.pop, result)
             self.did_operation = True
+        if ascii_code == 45:  # -
+            result = self.stack.data[1] - self.stack.data[0] & MASK
+            self.stack.update(stack_code.pop, result)
+            self.did_operation = True
 
     def update_expr(self, expr):
         for e in expr:

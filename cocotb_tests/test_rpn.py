@@ -20,7 +20,7 @@ def generate_input() -> str:
         case 0:
             return str(gen_number()) + "E"
         case 1:
-            return random.choice(["+", "*"])
+            return random.choice(["+", "*", "-"])
         case 2:
             return chr(random.randrange(100))
         case _:
