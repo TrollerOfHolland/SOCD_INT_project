@@ -1,3 +1,4 @@
+-- Author: Tristan Bottenberg
 
 configuration conf_tb_siso_gen_rpn of tb_siso_gen_top is
   for top 

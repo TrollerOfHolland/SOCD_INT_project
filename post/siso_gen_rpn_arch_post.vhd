@@ -1,3 +1,5 @@
+-- Author: Lars Gortemaker (Synthesized by)
+-- DATA_WIDTH = 8, STACK_SIZE = 10
 
 library IEEE,umcl18u250t2;
 

@@ -1,3 +1,4 @@
+-- Author: Lars Gortemaker (EDITED FOR POST_SYNTH SIMULATION)
 
 configuration conf_tb_siso_gen_rpn_post of tb_siso_gen_top is
   for top 
