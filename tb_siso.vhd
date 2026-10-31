@@ -5,7 +5,7 @@ use ieee.std_logic_1164.all;
 
 entity tb_siso_gen is
     generic (DATA_WIDTH: natural := 8;
-            STACK_SIZE: integer := 100;
+            STACK_SIZE: integer := 10;
             half_clock_period: time := 5 ns);
 end entity tb_siso_gen;
 
@@ -60,7 +60,7 @@ begin
         DATA_WIDTH => DATA_WIDTH,
         STACK_SIZE => STACK_SIZE,
         half_clock_period => half_clock_period,
-        in_file_name => "/dev/urandom",
+        in_file_name => "rpn.in",
         out_file_name => "rpn.out"
     )
      port map(

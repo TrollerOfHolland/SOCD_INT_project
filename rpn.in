@@ -1,0 +1,9 @@
+1 E 1 +             # Succesfull addition
+1 E 2 *             # Succesfull multiplication
+1 E 1 -             # Succesfull Subtraction
+1 ABDFJKE 123 +     # Handling invalid input
+255 E 4 +           # Handling overflow
+4 E 255 -           # Handling underflow
+1234 E 1 +          # Handling overflow of digit concatenation
+1 E 1 E 1 E 1 E 1 E 1 E 1 E 1 E 1 E 1 E 1 +     # Handling more inputs than stack size
+

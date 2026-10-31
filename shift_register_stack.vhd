@@ -7,7 +7,7 @@ use IEEE.MATH_REAL.ALL;
 
 entity shift_register_stack is 
   generic (
-    STACK_SIZE : integer := 100;
+    STACK_SIZE : integer := 10;
     DATA_WIDTH : integer := 8
 );
 port( clk   :   in std_logic;

@@ -11,7 +11,7 @@ entity tvc_siso_gen is
            STACK_SIZE: natural;
            half_clock_period: time := 100 ns;
            -- only used for file_io architecture
-           in_file_name: string := "/dev/urandom";
+           in_file_name: string := "rpn.in";
            --in_file_name: string := "rpn.in";
            out_file_name: string := "rpn.out");
   -- note that the signals are the same as in the entity siso_gen 
@@ -67,6 +67,8 @@ begin
     variable stack: int_array;
     variable sp: natural := 0;
     variable first_digit: boolean := true;
+    
+    variable num_of_errors: natural := 0;
 
   begin
     if falling_edge(clk_i)
@@ -89,9 +91,9 @@ begin
           output := to_integer(unsigned(data_out));
           write(outline, input);
           writeline(out_file, outline);
-          -- report "Checking: " & to_string(to_integer(unsigned(data_out))) & " | " & to_string(stack(0));
           if (to_integer(unsigned(data_out)) /= stack(0)) then
-            report "Failure!!!" severity failure;
+            report "Error detected. Expected " & to_string(stack(0)) & " but got " & to_string(to_integer(unsigned(data_out))) severity note;
+            num_of_errors := num_of_errors + 1;
           end if;
         end if; -- ready
 
@@ -140,15 +142,18 @@ begin
                   when others => null;
 
               end case;
-              -- report "Test_Stack: " & to_string(stack(0)) & " | " & to_string(stack(1));
               -- encode input as a 2's complement signal
               data_in <= std_logic_vector(to_unsigned(character'pos(input), DATA_WIDTH));
               time_out_counter := 0;
           else
               reset <= '1';
-              assert not endfile(in_file)
-                report "OK! Simulation stopped at end of input file." 
-                severity failure;
+              if endfile(in_file) then
+                if num_of_errors > 0 then
+                    report "Failed to verify correctness of the DUV. Found " & to_string(num_of_errors) & " differences between the recieved output and the expected output." severity failure;
+                else
+                    report "The DUV passed all specified test cases and simulation stopped at end of input file." severity failure; 
+                end if;
+              end if;
               readline(in_file, inline);
 
               sp := 0;

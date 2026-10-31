@@ -18,6 +18,8 @@ begin
 
     process(ALU_right, ALU_right, enabled, operator)
         variable mult_temp: unsigned(2*DATA_WIDTH - 1 downto 0);
+        variable subtract: std_logic;
+        variable addition_right: unsigned(DATA_WIDTH - 1 downto 0);
     begin
         if (enabled = '0')
         then
@@ -26,11 +28,15 @@ begin
         then
             mult_temp := ALU_left * ALU_right;
             ALU_out <= mult_temp(DATA_WIDTH - 1 downto 0);
-        elsif (operator = "01") -- Addition
-        then
-            ALU_out <= ALU_left + ALU_right;
         else
-            ALU_out <= ALU_left - ALU_right; -- subtraction
+            if (operator = "01") -- Addition
+            then
+                subtract := '0';
+            else -- subtraction
+                subtract := '1';
+            end if;
+            addition_right := ALU_right xor (DATA_WIDTH - 1 downto 0 => subtract);
+            ALU_out <= ALU_left + addition_right + (0 => subtract);
         end if;
     end process;
 
